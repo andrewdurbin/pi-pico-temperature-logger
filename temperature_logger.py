@@ -91,11 +91,17 @@ class PicoServer():
         # ...micropython also missing datetime module
         m,s = divmod(seconds,60)
         h,m = divmod(m,60)
-        out = "{} sec".format(s)
+        days,h = divmod(h,24)
+        weeks,days = divmod(days,7)
+        out = "{} secs".format(s)
         if m > 0:
-            out = "{} min ".format(m) + out
+            out = "{} mins ".format(m) + out
         if h > 0:
-            out = "{} hour ".format(h) + out
+            out = "{} hours ".format(h) + out
+        if days > 0:
+            out = "{} days ".format(days) + out
+        if weeks > 0:
+            out = "{} weeks".format(weeks) + out
         return out
         
     async def watchdog_loop(self):
@@ -168,7 +174,7 @@ class PicoServer():
     async def index_page(self,method,path,reader,writer):    
         writer.write('HTTP/1.0 200 OK\r\nContent-type: text/html\r\n\r\n')
         writer.write("<!DOCTYPE html><html>")
-        writer.write("<head><title>Micro Python Server</title></head>")
+        writer.write("<head><title>Micro Python Server Version 0.1</title></head>")
         writer.write("<body>")
         writer.write("<h1>uasyncio Server</h1><p>Current Pi Pico Temp Sensor: {} degrees F (Min:{} Max:{})</p>".format(self.temp_f_latest, self.temp_f_min, self.temp_f_max))
         
